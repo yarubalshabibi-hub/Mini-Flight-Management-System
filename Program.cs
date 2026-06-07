@@ -56,7 +56,8 @@
                         RegisterPassenger();
                         break;
 
-                    case 2:;
+                    case 2:
+                        ViewAllPassengers();
                         break;
 
                     case 3:;
@@ -96,7 +97,6 @@
 
         static void PrintMenu()
         {
-            Console.WriteLine("Enter your choice: ");
             Console.WriteLine("========================================");
             Console.WriteLine("  SKY WINGS FLIGHT MANAGEMENT SYSTEM   ");
             Console.WriteLine("========================================");
@@ -113,11 +113,74 @@
             Console.WriteLine("0. Exit");
             Console.WriteLine("========================================");
         }
-        static void RegisterPassenger()
+       
+        /// RegisterPassenger
+           static void RegisterPassenger()
         {
-            Console.WriteLine("Register New Passenger: "); 
+            Console.WriteLine("Register New Passenger: ");
+            Console.Write("Enter passenger full name: ");
+            string name = Console.ReadLine().Trim();
+
+          
+            if (name == "")
+            {
+                Console.WriteLine("Error: Name cannot be empty.");
+                return;
+            }
+
+          
+            for (int i = 0; i < passengerNames.Count; i++)
+            {
+                if (passengerNames[i].ToLower() == name.ToLower())
+                {
+                    Console.WriteLine("Error: Passenger already registered.");
+                    return;
+                }
+            }
+
+            int nextNum = passengerNames.Count + 1;
+            string ticketId = "TKT" + nextNum.ToString("D3");
+
+            passengerNames.Add(name);
+            ticketNumbers.Add(ticketId);
+
+            Console.WriteLine("Passenger registered successfully!");
+            Console.WriteLine("Name: " + name + "  Ticket ID: " + ticketId);
         }
+       
+        /// ViewAllPassengers
+                static void ViewAllPassengers()
+        {
+            Console.WriteLine("All Passengers: ");
+
+            if (passengerNames.Count == 0)
+            {
+                Console.WriteLine("No passengers registered yet: ");
+                return;
+            }
+
+            Console.WriteLine("No.Passenger Name:    Ticket ID:  Status:");
+          
+
         
+            for (int i = 0; i < passengerNames.Count; i++)
+            {
+                string status = "Active";
+                if (cancelledTickets.Contains(ticketNumbers[i]))
+                    status = "CANCELLED";
+
+                Console.WriteLine((i + 1).ToString().PadRight(3) 
+                    + passengerNames[i].PadRight(24) 
+                    + ticketNumbers[i].PadRight(9) 
+                    + status);
+            }
+
+            Console.WriteLine("Total passengers: " + passengerNames.Count);
+        }
+       
+    
+
+
 
     }
 }
