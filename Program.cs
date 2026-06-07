@@ -25,11 +25,11 @@
             passengerNames.Add("Khalid");
 
             ///ticketNumbers
-            ticketNumbers.Add("TKT-1");
-            ticketNumbers.Add("TKT-2");
-            ticketNumbers.Add("TKT-3");
-            ticketNumbers.Add("TKT-4");
-            ticketNumbers.Add("TKT-5");
+            ticketNumbers.Add("TKT1");
+            ticketNumbers.Add("TKT2");
+            ticketNumbers.Add("TKT3");
+            ticketNumbers.Add("TKT4");
+            ticketNumbers.Add("TKT5");
 
             /// availableDates
             availableDates.Add("12-5-2026");
@@ -60,7 +60,8 @@
                         ViewAllPassengers();
                         break;
 
-                    case 3:;
+                    case 3:
+                        BookFlight();
                         break;
 
                     case 4:;
@@ -177,8 +178,71 @@
 
             Console.WriteLine("Total passengers: " + passengerNames.Count);
         }
-       
-    
+        static void BookFlight()
+        {
+            Console.WriteLine("Book a Flight Ticket: ");
+            Console.Write("Enter ticket ID: ");
+            string ticketId = Console.ReadLine().Trim().ToUpper();
+
+          
+            if (!ticketNumbers.Contains(ticketId))
+            {
+                Console.WriteLine("Error: Ticket ID not found");
+                return;
+            }
+
+          
+            if (cancelledTickets.Contains(ticketId))
+            {
+                Console.WriteLine("Error: This ticket has been cancelled");
+                return;
+            }
+
+           
+            if (bookingRecord.ContainsKey(ticketId))
+            {
+                Console.WriteLine("Error: Ticket already has a booking Use option 5 to update: ");
+                return;
+            }
+
+           
+            Console.WriteLine("Available Flights: ");
+            for (int i = 0; i < flightNumbers.Length; i++)
+                Console.WriteLine(i + ". " + flightNumbers[i]);
+
+            Console.Write("Select flight enter index: ");
+            if (!int.TryParse(Console.ReadLine(), out int flightIdx)
+                || flightIdx < 0 || flightIdx >= flightNumbers.Length)
+            {
+                Console.WriteLine("Error: Invalid flight selection.");
+                return;
+            }
+
+          
+            Console.WriteLine("Available Dates :");
+            for (int i = 0; i < availableDates.Count; i++)
+                Console.WriteLine(i + ". " + availableDates[i]);
+
+            Console.Write("Select date enter index: ");
+            if (!int.TryParse(Console.ReadLine(), out int dateIdx)
+                || dateIdx < 0 || dateIdx >= availableDates.Count)
+            {
+                Console.WriteLine("Error: Invalid date selection");
+                return;
+            }
+
+            bookingRecord[ticketId] = flightNumbers[flightIdx] + "|" + availableDates[dateIdx];
+
+            int idx = ticketNumbers.IndexOf(ticketId);
+            Console.WriteLine("Booking confirmed: ");
+            Console.WriteLine("Passenger: " + passengerNames[idx]);
+            Console.WriteLine("Ticket ID: " + ticketId);
+            Console.WriteLine("Flight: " + flightNumbers[flightIdx]);
+            Console.WriteLine("Date: " + availableDates[dateIdx]);
+        }
+
+
+
 
 
 
