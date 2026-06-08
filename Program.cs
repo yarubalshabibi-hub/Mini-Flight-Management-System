@@ -71,7 +71,8 @@
                         UpdateBooking();
                         break;
 
-                    case 6:;
+                    case 6:
+                        CancelTicket();
                         break;
 
                     case 7:;
@@ -116,7 +117,6 @@
             Console.WriteLine("========================================");
         }
        
-        /// RegisterPassenger
            static void RegisterPassenger()
         {
             Console.WriteLine("Register New Passenger: ");
@@ -150,7 +150,6 @@
             Console.WriteLine("Name: " + name + "  Ticket ID: " + ticketId);
         }
        
-        /// ViewAllPassengers
                 static void ViewAllPassengers()
         {
             Console.WriteLine("All Passengers: ");
@@ -284,7 +283,7 @@
 
             if (!ticketNumbers.Contains(ticketId))
             {
-                Console.WriteLine("Error: Ticket ID not found");
+                Console.WriteLine("Error: Ticket ID not found!");
                 return;
             }
             if (cancelledTickets.Contains(ticketId))
@@ -294,7 +293,7 @@
             }
             if (!bookingRecord.ContainsKey(ticketId))
             {
-                Console.WriteLine("Error: No existing booking found");
+                Console.WriteLine("Error: No existing booking found!");
                 return;
             }
 
@@ -313,13 +312,13 @@
 
             if (!int.TryParse(Console.ReadLine(), out int option))
             {
-                Console.WriteLine("Invalid input.");
+                Console.WriteLine("Invalid input: ");
                 return;
             }
 
             if (option == 0)
             {
-                Console.WriteLine("No changes made.");
+                Console.WriteLine("No changes made: ");
                 return;
             }
 
@@ -334,7 +333,7 @@
                 Console.Write("Select new flight: ");
                 if (!int.TryParse(Console.ReadLine(), out int fi) || fi < 0 || fi >= flightNumbers.Length)
                 {
-                    Console.WriteLine("Invalid flight selection. Update cancelled");
+                    Console.WriteLine("Invalid flight selection Update cancelled: ");
                     return;
                 }
                 newFlight = flightNumbers[fi];
@@ -360,6 +359,67 @@
             Console.WriteLine("Booking updated successfully");
             Console.WriteLine("Old: Flight " + currentFlight + "Date " + currentDate);
             Console.WriteLine("New: Flight " + newFlight + "Date " + newDate);
+        }
+        static void CancelTicket()
+        {
+            Console.WriteLine("Cancel a Ticket: ");
+            Console.Write("Enter ticket ID: ");
+            string ticketId = Console.ReadLine().Trim().ToUpper();
+
+            if (!ticketNumbers.Contains(ticketId))
+            {
+                Console.WriteLine("Error: Ticket ID not found");
+                return;
+            }
+            if (cancelledTickets.Contains(ticketId))
+            {
+                Console.WriteLine("Error: Ticket is already cancelled");
+                return;
+            }
+
+            int idx = ticketNumbers.IndexOf(ticketId);
+            string passengerName = passengerNames[idx];
+
+            if (bookingRecord.ContainsKey(ticketId))
+            {
+                Console.WriteLine("Booking removed: " + bookingRecord[ticketId]);
+                bookingRecord.Remove(ticketId);
+            }
+
+            cancelledTickets.Add(ticketId);
+
+            if (checkedInQueue.Contains(passengerName))
+            {
+                Queue<string> tempQueue = new Queue<string>();
+                while (checkedInQueue.Count > 0)
+                {
+                    string p = checkedInQueue.Dequeue();
+                    if (p != passengerName)
+                        tempQueue.Enqueue(p);
+                }
+                while (tempQueue.Count > 0)
+                    checkedInQueue.Enqueue(tempQueue.Dequeue());
+
+                Console.WriteLine(passengerName + "removed from check in queue: ");
+            }
+
+            if (boardingStack.Contains(passengerName))
+            {
+                Stack<string> tempStack = new Stack<string>();
+                while (boardingStack.Count > 0)
+                {
+                    string p = boardingStack.Pop();
+                    if (p != passengerName)
+                        tempStack.Push(p);
+                }
+                while (tempStack.Count > 0)
+                    boardingStack.Push(tempStack.Pop());
+
+                Console.WriteLine(passengerName + "removed from boarding stack: ");
+            }
+
+            Console.WriteLine("Cancellation complete");
+            Console.WriteLine("Ticket: " + ticketId + "Passenger: " + passengerName + "Status: CANCELLED");
         }
 
     }
