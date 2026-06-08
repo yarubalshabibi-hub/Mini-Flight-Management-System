@@ -64,7 +64,7 @@
                         BookFlight();
                         break;
 
-                    case 4:;
+                    case 4:ViewBookingDetails();
                         break;
 
                     case 5:;
@@ -240,11 +240,41 @@
             Console.WriteLine("Flight: " + flightNumbers[flightIdx]);
             Console.WriteLine("Date: " + availableDates[dateIdx]);
         }
+        static void ViewBookingDetails()
+        {
+            Console.WriteLine("View Booking Details: ");
+            Console.Write("Enter ticket ID: ");
+            string ticketId = Console.ReadLine().Trim().ToUpper();
 
+            if (!ticketNumbers.Contains(ticketId))
+            {
+                Console.WriteLine("Error: Ticket ID not found");
+                return;
+            }
 
+            int idx = ticketNumbers.IndexOf(ticketId);
+            string passengerName = passengerNames[idx];
 
+            if (cancelledTickets.Contains(ticketId))
+            {
+                Console.WriteLine("This ticket has been cancelled: ");
+                return;
+            }
 
+                       if (!bookingRecord.ContainsKey(ticketId))
+            {
+                Console.WriteLine("No booking found for this ticket.");
+                return;
+            }
 
+               string[] parts = bookingRecord[ticketId].Split();
+
+            Console.WriteLine("Booking Summary: ");
+            Console.WriteLine("Passenger: " + passengerName);
+            Console.WriteLine("Ticket ID: " + ticketId);
+            Console.WriteLine("Flight: " + parts[0]);
+            Console.WriteLine("Date: " + parts[1]);
+        }
 
     }
 }
