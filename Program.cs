@@ -64,7 +64,8 @@
                         BookFlight();
                         break;
 
-                    case 4:ViewBookingDetails();
+                    case 4:
+                        ViewBookingDetails();
                         break;
 
                     case 5:
@@ -75,22 +76,28 @@
                         CancelTicket();
                         break;
 
-                    case 7:;
+                    case 7:
+                        PassengerCheckIn();
                         break;
 
-                    case 8:;
+                    case 8:
+                        ;
                         break;
 
-                    case 9:;
+                    case 9:
+                        ;
                         break;
 
-                    case 10:;
+                    case 10:
+                        ;
                         break;
 
-                    case 0: Console.WriteLine("Goodbye Safe travels ");
+                    case 0:
+                        Console.WriteLine("Goodbye Safe travels ");
                         break;
 
-                    default: Console.WriteLine("Invalid option Please choose 0-10");
+                    default:
+                        Console.WriteLine("Invalid option Please choose 0-10");
                         break;
 
                 }
@@ -116,21 +123,21 @@
             Console.WriteLine("0. Exit");
             Console.WriteLine("========================================");
         }
-       
-           static void RegisterPassenger()
+
+        static void RegisterPassenger()
         {
             Console.WriteLine("Register New Passenger: ");
             Console.Write("Enter passenger full name: ");
             string name = Console.ReadLine().Trim();
 
-          
+
             if (name == "")
             {
                 Console.WriteLine("Error: Name cannot be empty.");
                 return;
             }
 
-          
+
             for (int i = 0; i < passengerNames.Count; i++)
             {
                 if (passengerNames[i].ToLower() == name.ToLower())
@@ -149,8 +156,8 @@
             Console.WriteLine("Passenger registered successfully!");
             Console.WriteLine("Name: " + name + "  Ticket ID: " + ticketId);
         }
-       
-                static void ViewAllPassengers()
+
+        static void ViewAllPassengers()
         {
             Console.WriteLine("All Passengers: ");
 
@@ -161,18 +168,18 @@
             }
 
             Console.WriteLine("No.Passenger Name:    Ticket ID:  Status:");
-          
 
-        
+
+
             for (int i = 0; i < passengerNames.Count; i++)
             {
                 string status = "Active";
                 if (cancelledTickets.Contains(ticketNumbers[i]))
                     status = "CANCELLED";
 
-                Console.WriteLine((i + 1).ToString().PadRight(3) 
-                    + passengerNames[i].PadRight(24) 
-                    + ticketNumbers[i].PadRight(9) 
+                Console.WriteLine((i + 1).ToString().PadRight(3)
+                    + passengerNames[i].PadRight(24)
+                    + ticketNumbers[i].PadRight(9)
                     + status);
             }
 
@@ -184,28 +191,28 @@
             Console.Write("Enter ticket ID: ");
             string ticketId = Console.ReadLine().Trim().ToUpper();
 
-          
+
             if (!ticketNumbers.Contains(ticketId))
             {
                 Console.WriteLine("Error: Ticket ID not found");
                 return;
             }
 
-          
+
             if (cancelledTickets.Contains(ticketId))
             {
                 Console.WriteLine("Error: This ticket has been cancelled");
                 return;
             }
 
-           
+
             if (bookingRecord.ContainsKey(ticketId))
             {
                 Console.WriteLine("Error: Ticket already has a booking Use option 5 to update: ");
                 return;
             }
 
-           
+
             Console.WriteLine("Available Flights: ");
             for (int i = 0; i < flightNumbers.Length; i++)
                 Console.WriteLine(i + ". " + flightNumbers[i]);
@@ -218,7 +225,7 @@
                 return;
             }
 
-          
+
             Console.WriteLine("Available Dates :");
             for (int i = 0; i < availableDates.Count; i++)
                 Console.WriteLine(i + ". " + availableDates[i]);
@@ -261,13 +268,13 @@
                 return;
             }
 
-                       if (!bookingRecord.ContainsKey(ticketId))
+            if (!bookingRecord.ContainsKey(ticketId))
             {
                 Console.WriteLine("No booking found for this ticket");
                 return;
             }
 
-               string[] parts = bookingRecord[ticketId].Split();
+            string[] parts = bookingRecord[ticketId].Split();
 
             Console.WriteLine("Booking Summary: ");
             Console.WriteLine("Passenger: " + passengerName);
@@ -325,7 +332,7 @@
             string newFlight = currentFlight;
             string newDate = currentDate;
 
-                        if (option == 1 || option == 3)
+            if (option == 1 || option == 3)
             {
                 Console.WriteLine("Available Flights: ");
                 for (int i = 0; i < flightNumbers.Length; i++)
@@ -339,7 +346,7 @@
                 newFlight = flightNumbers[fi];
             }
 
-                        if (option == 2 || option == 3)
+            if (option == 2 || option == 3)
             {
                 Console.WriteLine("Available Dates:");
                 for (int i = 0; i < availableDates.Count; i++)
@@ -353,7 +360,7 @@
                 newDate = availableDates[di];
             }
 
-            
+
             bookingRecord[ticketId] = newFlight + newDate;
 
             Console.WriteLine("Booking updated successfully");
@@ -421,6 +428,23 @@
             Console.WriteLine("Cancellation complete");
             Console.WriteLine("Ticket: " + ticketId + "Passenger: " + passengerName + "Status: CANCELLED");
         }
+        static void PassengerCheckIn()
+        {
+            int option = -1;
+            while (option != 0)
+            {
+                Console.WriteLine("Passenger Check In: ");
+                Console.WriteLine("1.Check in a passenger: ");
+                Console.WriteLine("2.View check in queue: ");
+                Console.WriteLine("3.Process next passenger: ");
+                Console.WriteLine("0.Back");
+                Console.Write("Select: ");
+
+                if (!int.TryParse(Console.ReadLine(), out option));
+
+            }
+        }
+
 
     }
 }
