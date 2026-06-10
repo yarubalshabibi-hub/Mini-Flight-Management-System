@@ -514,6 +514,14 @@
                 if (!int.TryParse(Console.ReadLine(), out option));
 
             }
+            try
+            {
+                int divisor = 0;
+                int result = 10 / divisor;
+                Console.WriteLine(result);
+            }
+            catch(DivideByZeroException ex)
+            {  Console.WriteLine("Error:" +  ex.Message); }
         }
 
 
