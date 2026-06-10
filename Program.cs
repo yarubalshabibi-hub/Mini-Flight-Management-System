@@ -1,4 +1,6 @@
-﻿namespace Mini_Flight_Management_System
+﻿using Microsoft.VisualBasic.FileIO;
+
+namespace Mini_Flight_Management_System
 {
     internal class Program
     {              // ── هذي المتغيرات المشتركة بين كل الـ functions ──────────────────────
@@ -151,9 +153,9 @@
             Console.WriteLine("0. Exit");
             Console.WriteLine("========================================");
         }
-       
+
         /// تسجيل مسافر جديد
-               static void RegisterPassenger()
+        static void RegisterPassenger()
         {
             Console.WriteLine("Register New Passenger: ");
             Console.Write("Enter passenger full name: ");
@@ -193,7 +195,7 @@
         }
 
 
-       //عرض كل المسافرين
+        //عرض كل المسافرين
         static void ViewAllPassengers()
         {
             Console.WriteLine("All Passengers: ");
@@ -498,7 +500,9 @@
             Console.WriteLine("Ticket: " + ticketId + "Passenger: " + passengerName + "Status: CANCELLED");
         }
 
+
         //تسجيل الدخول للرحلة
+
         static void PassengerCheckIn()
         {
             int option = -1;
@@ -511,21 +515,114 @@
                 Console.WriteLine("0.Back");
                 Console.Write("Select: ");
 
-                if (!int.TryParse(Console.ReadLine(), out option));
+                if (!int.TryParse(Console.ReadLine(), out option)) ;
+                {
+                    Console.WriteLine("Invalid input.");
+                    return;
+
+                }
 
             }
-            try
+        
+
+            if (option == 1)
             {
-                int divisor = 0;
-                int result = 10 / divisor;
-                Console.WriteLine(result);
+                Console.Write("Enter ticket ID: ");
+                string ticketId = Console.ReadLine().Trim().ToUpper();
+
+                if (!ticketNumbers.Contains(ticketId))
+                {
+                    Console.WriteLine("Error: Ticket not found.");
+                    return;
+                }
+                if (cancelledTickets.Contains(ticketId))
+                {
+                    Console.WriteLine("Error: Ticket is cancelled.");
+                    return;
+
+                }
+                if (!bookingRecord.ContainsKey(ticketId))
+                {
+                    Console.WriteLine("Error: No booking found. Please book first option 3)");
+                    return;
+                }
+
+                int idx = ticketNumbers.IndexOf(ticketId);
+                string passengerName = passengerNames[idx];
+
+                // Contains يتحقق أن المسافر مو موجود أصلاً في الـ queue
+                if (checkedInQueue.Contains(passengerName))
+                {
+                    Console.WriteLine("Error: Passenger already in check-in queue");
+                    return;
+                }
+
+                // لو عدد الـ queue أقل من 10 أضفه فيها وإلا أضفه في الانتظار
+                if (checkedInQueue.Count < 10)
+                {
+                    checkedInQueue.Enqueue(passengerName);
+                    Console.WriteLine(passengerName + " checked in. Queue position: " + checkedInQueue.Count);
+                }
+                else
+                {
+                    waitlistQueue.Enqueue(passengerName);
+                    Console.WriteLine("Queue is full. " + passengerName + " added to waitlist (position " + waitlistQueue.Count + ").");
+                }
             }
-            catch(DivideByZeroException ex)
-            {  Console.WriteLine("Error:" +  ex.Message); }
+            else if (option == 2)
+            {
+                Console.WriteLine("Check-In Queue: ");
+                if (checkedInQueue.Count == 0)
+                {
+                    Console.WriteLine("Queue is empty.");
+                }
+                else
+                {
+                    // foreach تعرض بدون ما تحذف من الـ queue
+                    int pos = 1;
+                    foreach (string p in checkedInQueue)
+                    {
+                        Console.WriteLine(pos + ". " + p);
+                        pos++;
+                    }
+                }
+                Console.WriteLine("Waitlist count: " + waitlistQueue.Count);
+            }
+            else if (option == 3)
+            {
+                if (checkedInQueue.Count == 0)
+                {
+                    Console.WriteLine("Queue is empty. No passengers to process.");
+                    return;
+                }
+
+                // Dequeue تأخذ الشخص الأول من الـ queue
+                string processed = checkedInQueue.Dequeue();
+                Console.WriteLine("Processed: " + processed);
+
+                // لو في أشخاص في الانتظار انقلهم للـ queue تلقائياً
+                if (waitlistQueue.Count > 0)
+                {
+                    string promoted = waitlistQueue.Dequeue();
+                    checkedInQueue.Enqueue(promoted);
+                    Console.WriteLine(promoted + " moved from waitlist to check in queue: ");
+
+                    try
+                    {
+                        int divisor = 0;
+                        int result = 10 / divisor;
+                        Console.WriteLine(result);
+                    }
+                    catch (DivideByZeroException ex)
+                    { Console.WriteLine("Error:" + ex.Message); }
+                }
+
+            }
+            
         }
-
-
     }
 }
+
+        
 
 
